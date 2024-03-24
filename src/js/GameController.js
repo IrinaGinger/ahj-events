@@ -12,14 +12,12 @@ export default class GameController {
         this.countSuccess = 0;                    // счетчик удачных попаданий   
         this.fail = 0;                            // счетчик промахов
 
-        // this.onCellClick = this.onCellClick.bind(this);
         let countSuccessEl = document.querySelector(".status-wins");                         
         let countfailEl = document.querySelector(".status-lost");               
 
         document.addEventListener('click', (event) => {
             onClick = this.onCellClick(event);
         });
-        // document.addEventListener('click', () => {onClick = true});
 
         const redrawInterval = setInterval(() => {
             if (!onClick) {
