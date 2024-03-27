@@ -14,6 +14,10 @@ export default class GamePlay {
     }
 
     drawUi() {
+        if (this.cells.length > 0) {
+            this.container.removeChild(this.container.querySelector('.board-container'));
+        }
+
         const boardContainer = document.createElement('div');
         boardContainer.classList.add('board-container');
         this.container.appendChild(boardContainer);
@@ -33,11 +37,15 @@ export default class GamePlay {
         this.cells = Array.from(this.boardEl.children);
     }
 
-    redrawPosition(position) {
-        for (const cell of this.cells) {
-          cell.innerHTML = '';
+    hideCharacter() {
+        let char = document.querySelector('.character');
+        if (char) {
+            char.remove();
+            
         }
-    
+    }
+
+    showCharacter(position) {
         const cellEl = this.boardEl.children[position];
         const charEl = document.createElement('div');
         charEl.classList.add('character');

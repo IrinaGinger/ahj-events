@@ -1,50 +1,66 @@
 export default class GameController {
     constructor(gamePlay) {
         this.gamePlay = gamePlay;
+        this.timerId = "";
     } 
 
     init() {
+        this.onClick = false;
         this.gamePlay.drawUi();
 
-        let onClick = false;
-        let position;
+        if (this.timerId !== "") {
+            clearTimeout(this.timerId);
+            this.timerId = "";
+        }
 
-        this.countSuccess = 0;                    // счетчик удачных попаданий   
-        this.fail = 0;                            // счетчик промахов
-
-        let countSuccessEl = document.querySelector(".status-wins");                         
-        let countfailEl = document.querySelector(".status-lost");               
+        this.countSuccess = document.querySelector('.status-wins');        // счетчик удачных попаданий                     
+        this.countfail = document.querySelector('.status-lost');           // счетчик промахов  
+        this.countSuccess.textContent = 0;
+        this.countfail.textContent = 0;
 
         document.addEventListener('click', (event) => {
-            onClick = this.onCellClick(event);
+            this.onClick = this.onCellClick(event);
         });
 
-        const redrawInterval = setInterval(() => {
-            if (!onClick) {
-                this.fail++;
-            }
-            onClick = false;
-            countSuccessEl.textContent = this.countSuccess;
-            countfailEl.textContent = this.fail;
-            
-            if (this.fail === 6) {
-                clearInterval(redrawInterval);
-                alert("Вы проиграли");
-                this.init();
-            }
-            console.log(this.countSuccess, this.fail);
-
-            position = Math.floor(Math.random() * (this.gamePlay.boardSize) ** 2);
-            this.gamePlay.redrawPosition(position);
-        }, 1000);
+        this.next();
     }
-
+    
     onCellClick(e) {
         const target = e.target;
         
         if(target.classList.contains('character')) {
-            this.countSuccess++;
+            e.stopImmediatePropagation();
+
+            this.countSuccess.textContent++;
+            this.gamePlay.hideCharacter();
+            clearTimeout(this.timerId);
+            this.next();
             return true;
         }
     }
+
+    next() {
+        let newPosition;
+
+        this.timerId = setTimeout(() => {            
+            if (Number(this.countfail.textContent) === 5) {
+                alert("Вы проиграли");
+                this.init();
+            }
+            
+            this.gamePlay.hideCharacter();
+            newPosition = Math.floor(Math.random() * (this.gamePlay.boardSize) ** 2);
+            this.gamePlay.showCharacter(newPosition);
+            
+            if (!this.onClick) {
+                this.countfail.textContent++;
+            }
+            this.onClick = false;
+            
+            clearTimeout(this.timerId);
+            this.next();
+        }, 1000);
+    }
+
+
 }
