@@ -1,0 +1,35 @@
+:root {
+    --cell-size: 100px;
+}
+
+.board-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+
+}
+
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 2px solid green;
+}
+
+.character {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    position: absolute;
+    z-index: 99;
+
+    background: url(2dbd01ce16c0fa83cb67.png);
+    background-size: 100%;
+}
+
